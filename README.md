@@ -1,6 +1,8 @@
 # Home Print 
 **Version 2.0.0 - 2026 Release**
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Buka_Aplikasi-cyan?style=for-the-badge)](http://homeprint-developer.github.io/homeprint.me/)
+
 Home Print adalah platform layanan cetak dokumen dan foto berbasis web. Aplikasi ini dirancang untuk memberikan kemudahan bagi pengguna dalam menentukan spesifikasi cetak secara interaktif, menghitung biaya transaksi dan ongkos kirim secara otomatis menggunakan integrasi peta, serta memfasilitasi komunikasi pesanan langsung ke WhatsApp admin.
 
 Platform ini juga dilengkapi dengan halaman dasbor khusus admin untuk manajemen stok barang, varian kertas foto, penyedia alat cerdas pembuat dokumen (CV/Lamaran & Nota Resmi otomatis), serta pengelolaan kritik dan saran dari pelanggan dengan sistem keamanan maksimal untuk skala aplikasi web statis.
@@ -85,4 +87,4 @@ Database dilindungi dari serangan _Database Deface_ dan _Malicious Code Injectio
 
 1. **Klon Repositori**
    ```bash
-   git clone [https://github.com/HomePrint-Developer/home-print.github.io.git](https://github.com/HomePrint-Developer/home-print.github.io.git)
+   git clone [https://github.com/HomePrint-Developer/homeprint.me.git](https://github.com/HomePrint-Developer/homeprint.me.git)
