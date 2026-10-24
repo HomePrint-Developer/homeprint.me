@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="ic-transparent.png" type="image/png">
-    <title>Layanan Tutup Sementara - Home Print</title>
+    <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Konfigurasi Tailwind untuk mendeteksi class 'dark' secara manual
@@ -14,152 +14,504 @@
         }
     </script>
     <style>
-        .glass-panel {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        @keyframes pulse-slow {
+        @keyframes subtleFloat {
 
             0%,
             100% {
-                opacity: 0.4;
-                transform: scale(1);
+                transform: translateY(0px) rotate(0deg);
             }
 
             50% {
-                opacity: 0.6;
-                transform: scale(1.05);
+                transform: translateY(-10px) rotate(2deg);
             }
         }
 
-        .animate-pulse-slow {
-            animation: pulse-slow 6s infinite ease-in-out;
+        .animate-float {
+            animation: subtleFloat 5s ease-in-out infinite;
         }
 
-        /* Transisi halus untuk perpindahan tema */
-        body,
-        .glass-panel,
-        h1,
-        p,
-        div,
-        svg {
-            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+        .modal-active {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+
+        /* Transisi smooth untuk perpindahan tema di seluruh elemen */
+        body * {
+            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 400ms;
         }
     </style>
 </head>
 
 <body
-    class="bg-slate-50 dark:bg-slate-900 font-sans min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden select-none">
-
-    <!-- Set Theme Awal (Default Light) -->
-    <script>
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark'); // Light default
-        }
-    </script>
+    class="bg-slate-50 dark:bg-slate-900 font-sans min-h-screen flex flex-col justify-center items-center p-4 relative overflow-hidden transition-colors duration-500">
 
     <!-- Ornamen Background -->
     <div
-        class="absolute w-72 h-72 rounded-full bg-cyan-400/30 dark:bg-cyan-500/10 blur-[100px] -top-12 -left-12 pointer-events-none animate-pulse-slow">
+        class="absolute w-72 h-72 md:w-96 md:h-96 rounded-full bg-cyan-400/30 dark:bg-cyan-500/20 blur-[80px] md:blur-[120px] -top-12 md:-top-20 -left-12 md:-left-20 pointer-events-none">
     </div>
-    <div class="absolute w-80 h-80 rounded-full bg-pink-400/30 dark:bg-pink-500/10 blur-[120px] bottom-10 right-0 pointer-events-none animate-pulse-slow"
-        style="animation-delay: 3s;"></div>
     <div
-        class="absolute w-60 h-60 rounded-full bg-indigo-400/20 dark:bg-indigo-500/5 blur-[90px] top-1/3 left-1/3 pointer-events-none">
+        class="absolute w-80 h-80 md:w-[30rem] md:h-[30rem] rounded-full bg-pink-400/25 dark:bg-pink-500/15 blur-[100px] md:blur-[140px] bottom-10 md:-bottom-20 right-0 md:-right-20 pointer-events-none">
+    </div>
+    <div
+        class="absolute w-60 h-60 md:w-80 md:h-80 rounded-full bg-yellow-400/20 dark:bg-yellow-500/10 blur-[90px] md:blur-[120px] top-1/3 right-1/4 pointer-events-none">
     </div>
 
-    <!-- Main Container -->
+    <!-- Tombol Header Kiri (Kritik Saran & Lonceng) -->
+    <div class="absolute top-4 md:top-8 left-4 md:left-8 z-20 flex flex-col items-start gap-3">
+        <a href="feedback.html"
+            class="text-xs md:text-sm font-extrabold text-white bg-gradient-to-r from-cyan-500 to-indigo-500 hover:brightness-110 px-4 md:px-5 py-2.5 md:py-3 rounded-2xl md:rounded-3xl tracking-wide shadow-md shadow-cyan-500/20 dark:shadow-cyan-500/10 border border-cyan-400/30 dark:border-cyan-400/20 block transform active:scale-95 transition-all">
+            Kritik & Saran
+        </a>
+
+        <!-- Tombol Lonceng Notifikasi (Di bawah Kritik & Saran) -->
+        <button id="btnOpenWhatsNew" type="button" title="What's New"
+            class="relative flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 bg-white/60 dark:bg-white/5 hover:bg-white/90 dark:hover:bg-white/10 backdrop-blur-md p-2.5 md:p-3 rounded-2xl md:rounded-3xl border border-slate-300/60 dark:border-white/10 shadow-sm transform active:scale-95 transition-all ml-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            </svg>
+            <!-- Titik Merah Notifikasi -->
+            <span id="redDot"
+                class="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-slate-50 dark:border-slate-900 rounded-full animate-pulse"></span>
+        </button>
+    </div>
+
+    <!-- Tombol Header Kanan -->
+    <div class="absolute top-4 md:top-8 right-4 md:right-8 z-20">
+        <button id="btnOpenLoginModal" type="button"
+            class="text-xs md:text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white/60 dark:bg-white/5 hover:bg-white/90 dark:hover:bg-white/10 backdrop-blur-md px-4 md:px-5 py-2.5 md:py-3 rounded-2xl md:rounded-3xl border border-slate-300/60 dark:border-white/10 tracking-wide shadow-sm block transform active:scale-95 transition-all">
+            Admin Area
+        </button>
+    </div>
+
+    <!-- Konten Utama -->
     <div
-        class="max-w-md w-full glass-panel bg-white/70 dark:bg-white/[0.05] rounded-[32px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6)] p-8 text-center text-slate-900 dark:text-white relative z-10 border border-white dark:border-white/10">
+        class="max-w-md md:max-w-4xl lg:max-w-5xl w-full bg-white/70 dark:bg-white/[0.06] backdrop-blur-xl rounded-[32px] md:rounded-[40px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] p-6 sm:p-8 md:p-12 mb-24 md:mb-0 border border-white dark:border-white/10 relative z-10 flex flex-col md:flex-row items-center md:justify-between gap-8 md:gap-12">
 
-        <!-- Wrapper Ikon Gear & Bubble -->
-        <div class="relative inline-block mb-6">
+        <!-- KOLOM KIRI (Teks & Tombol Desktop) -->
+        <div class="flex-1 text-center md:text-left flex flex-col items-center md:items-start mt-10 md:mt-0">
+            <h1
+                class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-3 md:mb-5">
+                Home <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-pink-500 to-yellow-500 dark:from-cyan-400 dark:via-pink-400 dark:to-yellow-400">Print</span>
+            </h1>
+            <p
+                class="text-slate-600 dark:text-slate-300 text-sm md:text-base lg:text-lg font-medium px-4 md:px-0 leading-relaxed md:max-w-md">
+                Cetak dokumen & foto Anda dengan kualitas tajam, cepat, dan siap antar langsung ke depan pintu rumah.
+            </p>
 
-            <!-- Notifikasi Bubble Tooltip -->
-            <div id="tooltipBubble"
-                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-[220px] bg-slate-800 text-white text-[10px] font-medium p-3 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-                Anda dapat mengganti tema hanya dengan klik icon gear ini, klik lagi jika ingin kembali ke tema
-                sebelumnya.
-                <!-- Segitiga penunjuk ke bawah -->
-                <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-800 rotate-45"></div>
-            </div>
-
-            <!-- Ikon Gear Berputar (Bisa Diklik) -->
-            <div id="gearIconBtn"
-                class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-tr from-cyan-100 to-pink-100 dark:from-cyan-500/20 dark:to-pink-500/20 border border-slate-200 dark:border-white/10 shadow-inner group cursor-pointer hover:scale-105 active:scale-95 transition-transform relative z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-10 h-10 text-pink-500 dark:text-pink-400 animate-[spin_4s_linear_infinite]">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.767c-.3.23-.45.62-.41.99.01.079.012.16.012.242 0 .083-.002.163-.012.242-.04.369.11.758.41.99l1.003.767a1.125 1.125 0 0 1 .26 1.43l-1.296 2.247a1.125 1.125 0 0 1-1.37.49l-1.216-.456a1.125 1.125 0 0 0-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281a1.125 1.125 0 0 0-.645-.87a6.528 6.528 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.767c.301-.23.45-.619.41-.99a6.666 6.666 0 0 1-.012-.242c0-.083.004-.164.012-.242.04-.369-.11-.758-.41-.99l-1.004-.767a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.49l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128c.332-.183.582-.495.644-.869l.214-1.28Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-            </div>
+            <!-- Tombol Pilih Pesanan (Hanya Tampil di Desktop) -->
+            <button id="btnOpenServiceModalDesktop" type="button"
+                class="hidden md:block w-full max-w-[250px] mt-8 bg-gradient-to-r from-cyan-500 via-indigo-500 to-pink-500 hover:brightness-110 text-white font-extrabold py-4 px-6 rounded-2xl shadow-[0_12px_30px_rgba(6,182,212,0.3)] text-center transform active:scale-[0.97] transition-all duration-200 text-base tracking-wider border border-white/20 dark:border-white/10">
+                Pilih Pesanan
+            </button>
         </div>
 
-        <h1 class="text-2xl font-black tracking-tight mb-3 text-slate-800 dark:text-white">
-            Layanan Tutup <span
-                class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 dark:from-pink-400 dark:via-purple-300 dark:to-indigo-400">Sementara</span>
-        </h1>
+        <!-- KOLOM KANAN (Logo & Tooltip) -->
+        <div class="my-4 md:my-0 relative group inline-block flex-1 flex justify-center w-full">
+            <!-- Notifikasi Bubble Tooltip -->
+            <div id="tooltipBubble"
+                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-[240px] md:w-[280px] bg-slate-800 text-white text-[10px] md:text-xs font-medium p-3 md:p-4 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50 text-center leading-relaxed">
+                Anda dapat mengganti tema hanya dengan klik logo ini, klik lagi jika ingin kembali ke tema sebelumnya.
+                <!-- Segitiga penunjuk ke bawah -->
+                <div
+                    class="absolute -bottom-1.5 md:-bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 md:w-4 md:h-4 bg-slate-800 rotate-45">
+                </div>
+            </div>
 
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed px-1 mb-6 font-medium">
-            Mohon maaf, saat ini sistem pemesanan dan pengerjaan file tutup mulai jam 19:00 WITA tanggal 24 Oktober 2026 sampai waktu yang belum
-            ditentukan, dikarenakan masih <strong class="text-slate-800 dark:text-slate-200">Dalam Tahap Update Fitur dan Pemeliharaan Sistem </strong>. Terima kasih banyak
-            atas pengertiannya.
-        </p>
+            <!-- Efek Glow di belakang logo -->
+            <div
+                class="absolute inset-0 bg-gradient-to-tr from-cyan-400 via-pink-400 to-yellow-400 dark:from-cyan-500 dark:via-pink-500 dark:to-yellow-500 rounded-full blur-2xl opacity-30 dark:opacity-20 group-hover:opacity-50 dark:group-hover:opacity-40 w-44 h-44 md:w-64 md:h-64 mx-auto pointer-events-none transition-all duration-500">
+            </div>
 
-        <div class="border-t border-slate-200 dark:border-white/5 my-4"></div>
-
-        <p class="text-[10px] text-slate-500 dark:text-slate-500 tracking-wider uppercase mt-4 font-bold">
-            &copy; 2026 Home Print & Developer. All Rights Reserved.
-        </p>
+            <!-- Gambar Logo -->
+            <img src="ic.png" alt="Home Print Logo" id="themeToggleBtn" title="Klik untuk ubah tema"
+                class="relative rounded-3xl md:rounded-[40px] mx-auto w-44 md:w-64 lg:w-72 object-contain animate-float drop-shadow-[0_10px_15px_rgba(0,0,0,0.15)] dark:drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)] cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-300 z-10">
+        </div>
     </div>
 
-    <!-- Script Logika Interaksi -->
+    <!-- Teks Bawah (Hanya Tampil di Mobile) -->
+    <p
+        class="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-wide md:hidden mt-4 w-full text-center">
+        Tekan tombol di bawah untuk mulai pemesanan.
+    </p>
+
+    <!-- Tombol Pilih Pesanan Melayang Fixed Bawah & VERSI MOBILE -->
+    <div
+        class="fixed md:hidden bottom-0 left-0 right-0 flex flex-col items-center justify-end bg-gradient-to-t from-slate-50 dark:from-slate-900 via-slate-50/90 dark:via-slate-900/80 to-transparent p-4 pb-6 z-20 backdrop-blur-sm pointer-events-none">
+        <button id="btnOpenServiceModalMobile" type="button"
+            class="w-full max-w-md bg-gradient-to-r from-cyan-500 via-indigo-500 to-pink-500 hover:brightness-110 text-white font-extrabold py-4 px-6 rounded-2xl shadow-[0_12px_30px_rgba(6,182,212,0.3)] text-center transform active:scale-[0.97] transition-all duration-200 text-base tracking-wider border border-white/20 dark:border-white/10 block pointer-events-auto">
+            Pilih Pesanan
+        </button>
+    </div>
+
+    <!-- MODAL LAYANAN -->
+    <div id="serviceModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div id="serviceBackdrop"
+            class="absolute inset-0 bg-slate-900/30 dark:bg-slate-900/60 backdrop-blur-md opacity-0 transition-opacity duration-300">
+        </div>
+        <div id="serviceContent"
+            class="max-w-md w-full bg-white/90 dark:bg-slate-800 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-6 sm:p-8 border border-white dark:border-white/10 relative z-10 transform scale-95 opacity-0 transition-all duration-300">
+            <div class="text-center mb-6 border-b border-slate-200 dark:border-white/10 pb-4">
+                <button type="button" id="btnCloseServiceModal"
+                    class="absolute top-6 left-6 text-slate-400 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-400 font-bold text-sm flex items-center group bg-slate-100 dark:bg-white/5 p-1.5 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <h2 class="text-2xl font-black tracking-tight text-slate-900 dark:text-white mt-2 sm:mt-0">
+                    Pilih <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-pink-500 dark:from-cyan-400 dark:to-pink-400">Layanan</span>
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Silakan pilih jenis layanan yang Anda
+                    perlukan</p>
+            </div>
+            <form id="serviceForm" class="space-y-4">
+                <div class="space-y-3">
+                    <label
+                        class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-cyan-400 dark:hover:border-cyan-500/40 shadow-sm hover:shadow-md hover:bg-slate-50 dark:hover:bg-white/[0.08] cursor-pointer group group-has-[:checked]:border-cyan-500 dark:group-has-[:checked]:border-cyan-500 group-has-[:checked]:bg-cyan-50/50 dark:group-has-[:checked]:bg-transparent">
+                        <div class="flex items-center gap-3">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-cyan-600 dark:group-hover:text-white">Percetakan</span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400">Print, fotocopy, dan cetak
+                                    foto</span>
+                            </div>
+                        </div>
+                        <input type="radio" name="layanan" value="pesan.html" checked
+                            class="w-4 h-4 text-cyan-500 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-white/10 focus:ring-cyan-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 accent-cyan-500 dark:accent-cyan-400">
+                    </label>
+                    <label
+                        class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-pink-400 dark:hover:border-pink-500/40 shadow-sm hover:shadow-md hover:bg-slate-50 dark:hover:bg-white/[0.08] cursor-pointer group group-has-[:checked]:border-pink-500 dark:group-has-[:checked]:border-pink-500 group-has-[:checked]:bg-pink-50/50 dark:group-has-[:checked]:bg-transparent">
+                        <div class="flex items-center gap-3">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-pink-600 dark:group-hover:text-white">Jasa
+                                    Lainnya</span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400">Cv, lamaran kerja, jasa ketik,
+                                    dll</span>
+                            </div>
+                        </div>
+                        <input type="radio" name="layanan" value="jasa.html"
+                            class="w-4 h-4 text-pink-500 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-white/10 focus:ring-pink-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 accent-pink-500 dark:accent-pink-400">
+                    </label>
+                </div>
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-pink-500 hover:brightness-110 text-white font-black py-3.5 px-4 rounded-xl mt-4 shadow-[0_10px_25px_rgba(6,182,212,0.3)] border border-white/20 dark:border-white/10 transform active:scale-95 text-sm tracking-wider uppercase">
+                    Pilih & Lanjutkan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL LOGIN ADMIN -->
+    <div id="loginModal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4">
+        <div id="loginBackdrop"
+            class="absolute inset-0 bg-slate-900/30 dark:bg-slate-900/60 backdrop-blur-md opacity-0 transition-opacity duration-300">
+        </div>
+        <div id="loginContent"
+            class="max-w-md w-full bg-white/90 dark:bg-slate-800 backdrop-blur-2xl rounded-[32px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-6 sm:p-8 border border-white dark:border-white/10 relative z-10 transform scale-95 opacity-0 transition-all duration-300">
+            <div class="text-center mb-6 border-b border-slate-200 dark:border-white/10 pb-4">
+                <button type="button" id="btnCloseLoginModal"
+                    class="absolute top-6 left-6 text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-400 font-bold text-sm flex items-center group bg-slate-100 dark:bg-white/5 p-1.5 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <h2 class="text-2xl font-black tracking-tight text-slate-900 dark:text-white mt-2 sm:mt-0">
+                    Login <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-pink-500 dark:from-cyan-400 dark:to-pink-400">Admin</span>
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Silakan masuk untuk mengelola sistem</p>
+            </div>
+
+            <div id="errorNotification"
+                class="hidden mb-5 p-3.5 text-xs sm:text-sm rounded-xl border bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20 font-semibold tracking-wide shadow-sm">
+            </div>
+
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label
+                        class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">Username</label>
+                    <input type="text" id="username" required
+                        class="w-full px-4 py-3 bg-white/60 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-sm font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 shadow-inner"
+                        placeholder="Masukkan username">
+                </div>
+                <div>
+                    <label
+                        class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">Password</label>
+                    <input type="password" id="password" required
+                        class="w-full px-4 py-3 bg-white/60 dark:bg-white/5 border border-slate-300 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-sm font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 shadow-inner"
+                        placeholder="Masukkan password">
+                </div>
+                <button type="submit" id="btnLogin"
+                    class="w-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-pink-500 hover:brightness-110 text-white font-extrabold py-3.5 px-4 rounded-xl mt-6 shadow-[0_10px_25px_rgba(6,182,212,0.3)] text-center transform active:scale-[0.97] text-sm tracking-wide border border-white/20 dark:border-white/10">
+                    Masuk
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL WHAT'S NEW -->
+    <div id="whatsNewModal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4">
+        <div id="whatsNewBackdrop"
+            class="absolute inset-0 bg-slate-900/40 dark:bg-slate-900/70 backdrop-blur-md opacity-0 transition-opacity duration-300">
+        </div>
+
+        <div id="whatsNewContent"
+            class="max-w-md w-full bg-white/95 dark:bg-slate-800 backdrop-blur-2xl rounded-[32px] shadow-2xl p-6 sm:p-8 border border-white dark:border-white/10 relative z-10 transform scale-95 opacity-0 transition-all duration-300 flex flex-col max-h-[85vh]">
+
+            <div class="text-center mb-5 border-b border-slate-200 dark:border-white/10 pb-4 shrink-0 relative">
+                <button type="button" id="btnCloseWhatsNew"
+                    class="absolute top-0 right-0 text-slate-400 hover:text-red-500 font-bold p-1.5 rounded-full bg-slate-100 dark:bg-white/5 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <h2 class="text-2xl font-black tracking-tight text-slate-900 dark:text-white mt-1">
+                    What's <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-pink-500">New</span>
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-semibold uppercase tracking-wider">Sistem
+                    Home Print Versi 2.1.0 (Rilis 2026)</p>
+            </div>
+
+            <div class="overflow-y-auto pr-1 space-y-4 pb-2 text-left">
+                <!-- Fitur 1 -->
+                <div class="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
+                    <h4 class="font-black text-cyan-600 dark:text-cyan-400 mb-2 text-sm md:text-base">
+                        Tampilan Pintar (Mode Gelap/Terang)
+                    </h4>
+                    <p class="text-slate-600 dark:text-slate-300 text-xs md:text-sm font-medium leading-relaxed">
+                        Sistem kini dilengkapi dengan fitur adaptasi visual. Anda dapat mengganti tema website menjadi
+                        gelap atau terang hanya dengan menekan logo utama Home Print di halaman awal. Mode Gelap
+                        dirancang khusus untuk mengurangi ketegangan mata saat digunakan di ruangan minim cahaya, serta
+                        membantu menghemat daya baterai pada perangkat layar OLED. Perpindahan tema dilakukan dengan
+                        transisi yang halus dan tersimpan otomatis di perangkat Anda.
+                    </p>
+                </div>
+
+                <!-- Fitur 2 -->
+                <div class="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
+                    <h4 class="font-black text-pink-600 dark:text-pink-400 mb-2 text-sm md:text-base">
+                        Pemesanan Cetak Terintegrasi Peta
+                    </h4>
+                    <p class="text-slate-600 dark:text-slate-300 text-xs md:text-sm font-medium leading-relaxed">
+                        Proses pemesanan cetak dokumen (Print, Fotocopy, Cetak Foto) kini sepenuhnya digital. Sistem
+                        telah terintegrasi langsung dengan Leaflet dan routing engine untuk menentukan koordinat lokasi
+                        pengiriman secara presisi. Jarak tempuh dan estimasi biaya ongkos kirim akan dikalkulasi secara
+                        otomatis oleh sistem, memberikan transparansi harga sebelum Anda menyetujui pesanan.
+                    </p>
+                </div>
+
+                <!-- Fitur 3 -->
+                <div class="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
+                    <h4 class="font-black text-indigo-600 dark:text-indigo-400 mb-2 text-sm md:text-base">
+                        Otomatisasi Form CV & Surat Lamaran
+                    </h4>
+                    <p class="text-slate-600 dark:text-slate-300 text-xs md:text-sm font-medium leading-relaxed">
+                        Bagi Anda yang membutuhkan dokumen profesional, sistem kini menyediakan form dinamis interaktif
+                        untuk pengisian data Curriculum Vitae dan Surat Lamaran Kerja. Sistem akan memvalidasi input
+                        Anda, menyusun data riwayat secara struktural, lalu mengekstraksinya menjadi manifest rapi yang
+                        siap dikirim langsung ke WhatsApp admin. Proses ini meminimalisir kesalahan ketik dan sangat
+                        mempercepat waktu pemrosesan desain.
+                    </p>
+                </div>
+
+                <!-- Fitur 4 -->
+                <div class="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10">
+                    <h4 class="font-black text-emerald-600 dark:text-emerald-400 mb-2 text-sm md:text-base">
+                        Ruang Aspirasi & Pelaporan Bug
+                    </h4>
+                    <p class="text-slate-600 dark:text-slate-300 text-xs md:text-sm font-medium leading-relaxed">
+                        Kami menghadirkan ruang khusus (Kritik & Saran) bagi pengguna untuk memberikan masukan atau
+                        melaporkan kendala teknis pada website. Seluruh laporan yang Anda kirim akan langsung masuk ke
+                        database kami secara real-time. Umpan balik dari pelanggan merupakan fondasi utama kami untuk
+                        terus melakukan perbaikan dan mengembangkan fitur unggulan baru pada pembaruan sistem
+                        berikutnya.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
+                <button type="button" onclick="closeWhatsNew()"
+                    class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 font-bold py-3.5 rounded-xl transition text-sm">
+                    Tutup Informasi
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- LOGIC TEMA DARK/LIGHT & BUBBLE TOOLTIP -->
     <script>
-        const gearIconBtn = document.getElementById('gearIconBtn');
+        const html = document.documentElement;
+        const themeBtn = document.getElementById('themeToggleBtn');
         const tooltipBubble = document.getElementById('tooltipBubble');
         let bubbleTimeout;
 
-        // Logika Klik Gear (Ganti Tema)
-        gearIconBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Mencegah klik terdeteksi oleh document
+        // Pengecekan saat halaman dimuat
+        if (localStorage.getItem('theme') === 'dark') {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
 
-            // Toggle class 'dark' di elemen HTML
-            document.documentElement.classList.toggle('dark');
+        // Fungsi ketika Logo ditekan
+        themeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            html.classList.toggle('dark');
 
-            // Simpan preferensi ke Local Storage
-            if (document.documentElement.classList.contains('dark')) {
+            if (html.classList.contains('dark')) {
                 localStorage.setItem('theme', 'dark');
             } else {
                 localStorage.setItem('theme', 'light');
             }
 
-            // Jika bubble sedang muncul, sembunyikan saat gear diklik
             tooltipBubble.classList.remove('opacity-100');
             tooltipBubble.classList.add('opacity-0');
         });
 
-        // Logika Klik di Luar Gear (Munculkan Bubble 2 Detik)
+        // Event listener klik diluar logo (Memicu Tooltip)
         document.addEventListener('click', (e) => {
-            if (!gearIconBtn.contains(e.target)) {
-                // Tampilkan Bubble
+            if (!themeBtn.contains(e.target)) {
                 tooltipBubble.classList.remove('opacity-0');
                 tooltipBubble.classList.add('opacity-100');
 
-                // Reset timer jika user klik berkali-kali dengan cepat
                 clearTimeout(bubbleTimeout);
 
-                // Hilangkan setelah 2 detik
                 bubbleTimeout = setTimeout(() => {
                     tooltipBubble.classList.remove('opacity-100');
                     tooltipBubble.classList.add('opacity-0');
                 }, 4000);
             }
         });
+    </script>
+
+    <!-- FIREBASE & MODAL LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBO_jWfltM8J9obdA5Vio50kPtOqkDuDlw",
+            authDomain: "home-print-8437d.firebaseapp.com",
+            databaseURL: "https://home-print-8437d-default-rtdb.firebaseio.com",
+            projectId: "home-print-8437d",
+            storageBucket: "home-print-8437d.firebasestorage.app",
+            messagingSenderId: "418956397903",
+            appId: "1:418956397903:web:cb17eaeab729790f23093a",
+            measurementId: "G-ZHRM0PKS2D"
+        };
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorNotification');
+            const btnLogin = document.getElementById('btnLogin');
+
+            btnLogin.disabled = true;
+            btnLogin.innerText = 'Memeriksa...';
+            errorDiv.classList.add('hidden');
+
+            try {
+                const snapshot = await get(child(ref(db), 'users'));
+                if (snapshot.exists() && snapshot.val().username === usernameInput && snapshot.val().password === passwordInput) {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    window.location.href = "index-admin.html";
+                } else {
+                    errorDiv.innerText = 'Username atau Password salah!';
+                    errorDiv.classList.remove('hidden');
+                    btnLogin.disabled = false;
+                    btnLogin.innerText = 'Masuk';
+                }
+            } catch (error) {
+                errorDiv.innerText = 'Kesalahan koneksi database.';
+                errorDiv.classList.remove('hidden');
+                btnLogin.disabled = false;
+                btnLogin.innerText = 'Masuk';
+            }
+        });
+    </script>
+
+    <script>
+        // --- Fungsi Bantuan Modal Umum ---
+        function openAnyModal(modalId, contentId, backdropId) {
+            const modal = document.getElementById(modalId);
+            const content = document.getElementById(contentId);
+            const backdrop = document.getElementById(backdropId);
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                content.classList.add('modal-active');
+            }, 10);
+        }
+
+        function closeAnyModal(modalId, contentId, backdropId) {
+            const modal = document.getElementById(modalId);
+            const content = document.getElementById(contentId);
+            const backdrop = document.getElementById(backdropId);
+
+            backdrop.classList.add('opacity-0');
+            content.classList.remove('modal-active');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // --- LOGIC MODAL LAYANAN ---
+        const btnOpenMobile = document.getElementById('btnOpenServiceModalMobile');
+        const btnOpenDesktop = document.getElementById('btnOpenServiceModalDesktop');
+
+        if (btnOpenMobile) btnOpenMobile.addEventListener('click', (e) => { e.stopPropagation(); openAnyModal('serviceModal', 'serviceContent', 'serviceBackdrop') });
+        if (btnOpenDesktop) btnOpenDesktop.addEventListener('click', (e) => { e.stopPropagation(); openAnyModal('serviceModal', 'serviceContent', 'serviceBackdrop') });
+        document.getElementById('btnCloseServiceModal').addEventListener('click', () => closeAnyModal('serviceModal', 'serviceContent', 'serviceBackdrop'));
+        document.getElementById('serviceBackdrop').addEventListener('click', () => closeAnyModal('serviceModal', 'serviceContent', 'serviceBackdrop'));
+
+        document.getElementById('serviceForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const halamanTujuan = document.querySelector('input[name="layanan"]:checked').value;
+            window.location.href = halamanTujuan;
+        });
+
+        // --- LOGIC MODAL LOGIN ---
+        document.getElementById('btnOpenLoginModal').addEventListener('click', (e) => {
+            e.stopPropagation();
+            openAnyModal('loginModal', 'loginContent', 'loginBackdrop');
+        });
+        document.getElementById('btnCloseLoginModal').addEventListener('click', () => closeAnyModal('loginModal', 'loginContent', 'loginBackdrop'));
+        document.getElementById('loginBackdrop').addEventListener('click', () => closeAnyModal('loginModal', 'loginContent', 'loginBackdrop'));
+
+        // --- LOGIC MODAL WHAT'S NEW ---
+        document.getElementById('btnOpenWhatsNew').addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Matikan titik merah setelah dibaca
+            const redDot = document.getElementById('redDot');
+            if (redDot) redDot.classList.add('hidden');
+
+            openAnyModal('whatsNewModal', 'whatsNewContent', 'whatsNewBackdrop');
+        });
+
+        window.closeWhatsNew = function () {
+            closeAnyModal('whatsNewModal', 'whatsNewContent', 'whatsNewBackdrop');
+        };
+        document.getElementById('btnCloseWhatsNew').addEventListener('click', closeWhatsNew);
+        document.getElementById('whatsNewBackdrop').addEventListener('click', closeWhatsNew);
+
     </script>
 </body>
 

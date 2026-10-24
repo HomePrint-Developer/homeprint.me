@@ -1,5 +1,5 @@
 # Home Print 
-**Version 2.0.0 - 2026 Release**
+**Version 2.1.0 - 2026 Release**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Buka_Aplikasi-cyan?style=for-the-badge)](http://homeprint-developer.github.io/homeprint.me/)
 
@@ -11,11 +11,11 @@ Platform ini juga dilengkapi dengan halaman dasbor khusus admin untuk manajemen 
 
 ## Informasi Versi
 
-Aplikasi ini menggunakan standar *Semantic Versioning* (SemVer). Saat ini sistem berada pada **Versi 2.0.0 (2026 Release)**, dengan rincian makna angka sebagai berikut:
+Aplikasi ini menggunakan standar *Semantic Versioning* (SemVer). Saat ini sistem berada pada **Versi 2.1.0 (2026 Release)**, dengan rincian makna angka sebagai berikut:
 
 - **2 (Major)**: Menggambarkan perombakan besar-besaran pada antarmuka UI/UX (migrasi dari halaman terpisah menjadi arsitektur _Pop-Up Modal_ bergaya SPA), penambahan fitur inti tingkat lanjut (Integrasi API Peta Interaktif & Mesin Generator PDF), serta perombakan struktur keamanan sistem.
-- **0 (Minor)**: Menandakan bahwa kumpulan fitur utama yang baru saja dirilis ini berstatus stabil dan siap beroperasi.
-- **0 (Patch)**: Menunjukkan bahwa belum ada tambalan perbaikan _bug_ tambahan yang diaplikasikan setelah rilis mayor ini diluncurkan.
+- **1 (Minor)**: Menandakan pembaruan fitur baru secara substansial, mencakup penambahan sistem notifikasi rilis (What's New Modal) dan integrasi form dinamis interaktif untuk pengisian data CV serta Surat Lamaran secara *real-time*.
+- **0 (Patch)**: Menunjukkan bahwa belum ada tambalan perbaikan _bug_ tambahan yang diaplikasikan setelah rilis minor ini diluncurkan.
 
 ---
 
@@ -24,8 +24,9 @@ Aplikasi ini menggunakan standar *Semantic Versioning* (SemVer). Saat ini sistem
 ### Antarmuka Pelanggan
 
 - **Tema Gelap & Terang (Dark/Light Mode)**: Dukungan tema visual yang dinamis dan elegan yang tersimpan pada memori _Local Storage_, dilengkapi dengan transisi _smooth_ dan _bubble tooltip_ interaktif untuk memandu pengguna baru.
-- **UI/UX & Responsivitas Modern**: Menggunakan arsitektur layout Grid 2-Kolom khusus desktop untuk memaksimalkan ruang layar, serta dukungan _Backdrop Click-to-Close_ pada seluruh _Pop-Up Modal_ agar interaksi pengguna lebih natural.
-- **Pilihan Jasa Kondisional (Modal UI)**: Pemisahan alur spesifikasi antara layanan _Print & Fotocopy_, layanan _Cetak Foto_, dan _Jasa Lainnya_ (pembuatan CV, perbaikan file, ketik) secara terstruktur. Layanan jasa juga terintegrasi dengan opsi pembelian _Stok Tambahan Toko_.
+- **Sistem Notifikasi Rilis (What's New)**: Terintegrasi dengan tombol lonceng berindikator titik merah (*red dot*) di halaman utama untuk menginformasikan pembaruan fitur-fitur unggulan sistem kepada pelanggan secara rapi melalui modal interaktif.
+- **UI/UX & Responsivitas Modern**: Menggunakan arsitektur layout responsif (adaptasi 1-kolom di *mobile* dan Grid 2-kolom di desktop) untuk memaksimalkan ruang layar, serta dukungan _Backdrop Click-to-Close_ pada seluruh _Pop-Up Modal_.
+- **Pilihan Jasa Kondisional & Otomatisasi Form**: Pemisahan alur spesifikasi terstruktur untuk *Print*, *Foto*, dan *Jasa Lainnya*. Khusus layanan CV & Lamaran, kini dilengkapi form dinamis dengan validasi input otomatis (Email & Nomor HP) yang mengekstraksi riwayat data menjadi manifes rapi ke WhatsApp. 
 - **Integrasi Peta Interaktif (Multi-Layer)**: Menggunakan Leaflet.js yang dikombinasikan dengan _Google Maps Tile_ (mendukung mode **Peta Dasar** dan **Satelit**) untuk menentukan titik koordinat pengantaran. Dilengkapi fitur deteksi GPS otomatis (Lokasi Saya) dan tombol kendali yang rapi.
 - **Kalkulasi Biaya & Ongkir Cerdas**: Menghitung subtotal cetak/jasa secara *real-time* (termasuk kuantitas lembar & produk toko tambahan) dan ongkos kirim berbasis jarak mengemudi riil (OSRM API) dengan tarif **Rp3.000/KM** serta pengunci **Tarif Minimum Rp5.000** untuk proteksi jarak dekat.
 - **Gateway QRIS & WhatsApp**: Menyediakan instruksi QRIS instan dan otomatis menyusun teks manifes pesanan (nota digital) berformat rapi untuk dikirim ke WhatsApp admin.
@@ -69,15 +70,15 @@ Database dilindungi dari serangan _Database Deface_ dan _Malicious Code Injectio
 
 ## Struktur File Proyek
 
-- `index.html` - Halaman beranda pelanggan (Berisi trigger pemesanan, informasi versi, & _login modal_ admin).
-- `pesan.html` - Formulir layanan percetakan dokumen & cetak foto (terintegrasi API Peta).
-- `jasa.html` - Formulir layanan jasa (CV, Surat Lamaran, Ketik) yang terhubung ke pembelian produk fisik toko dan Peta Ongkir.
-- `feedback.html` - Halaman untuk pelanggan mengirim masukan/saran anonim.
-- `index-admin.html` - Hub dasbor utama admin (Manajemen stok barang, kertas, dan menu alat).
-- `feedback-admin.html` - Panel administrasi untuk membaca dan mengelola masukan/feedback.
-- `generate-file.html` - Alat pembuat file CV & Lamaran (Dokumen Generator).
-- `nota-kosong.html` - Alat pencetak seri nota fisik otomatis secara massal.
-- `close.html` / `maintenance.html` - Halaman pengalihan sementara (Hold Traffic) saat layanan sedang libur/perbaikan.
+- `index.html`: Halaman beranda utama pelanggan yang memuat akses navigasi, pemilihan jenis pesanan, login modal admin, serta notifikasi fitur unggulan (*What's New*).
+- `pesan.html`: Formulir layanan percetakan dokumen & cetak foto (terintegrasi API Peta).
+- `jasa.html`: Formulir layanan jasa (CV, Surat Lamaran, Ketik) yang dilengkapi dengan generator pop-up input data dinamis untuk menyusun profil pengguna, serta terhubung ke pembelian produk fisik toko dan Peta Ongkir.
+- `feedback.html`: Halaman untuk pelanggan mengirim masukan/saran anonim.
+- `index-admin.html`: Hub dasbor utama admin (Manajemen stok barang, kertas, dan menu alat).
+- `feedback-admin.html`: Panel administrasi untuk membaca dan mengelola masukan/feedback.
+- `generate-file.html`: Alat pembuat file CV & Lamaran internal (Dokumen Generator).
+- `nota-kosong.html`: Alat pencetak seri nota fisik otomatis secara massal.
+- `close.html` / `maintenance.html`: Halaman pengalihan sementara (Hold Traffic) saat layanan sedang libur/perbaikan.
 
 *(Catatan: File usang seperti `login.html` dan `add_stok.html` telah dilebur seluruhnya ke dalam bentuk interaksi Pop-Up Modal modern).*
 
@@ -85,6 +86,14 @@ Database dilindungi dari serangan _Database Deface_ dan _Malicious Code Injectio
 
 ## Konfigurasi dan Instalasi
 
+Karena aplikasi ini dibangun menggunakan arsitektur web statis (*Client-Side Rendering*), proses instalasinya sangat mudah dan tidak memerlukan Node.js atau pengaturan *backend* khusus.
+
 1. **Klon Repositori**
-   ```bash
-   git clone [https://github.com/HomePrint-Developer/homeprint.me.git](https://github.com/HomePrint-Developer/homeprint.me.git)
+   `git clone https://github.com/HomePrint-Developer/homeprint.me.git`
+
+2. **Buka Direktori Proyek**
+   `cd homeprint.me`
+
+3. **Jalankan Aplikasi**
+   - Anda dapat langsung membuka file `index.html` di browser pilihan Anda.
+   - **Rekomendasi:** Untuk pengalaman pengembangan terbaik dan mencegah isu CORS (terutama saat memuat modul Firebase), jalankan proyek menggunakan ekstensi **Live Server** di VS Code.
